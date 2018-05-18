@@ -13,8 +13,6 @@ class App extends React.Component {
     city: undefined,
     country: undefined,
     temperature: undefined,
-    temp_max: undefined,
-    temp_min: undefined,
     wind: undefined,
     humidity: undefined,
     description: undefined,
@@ -34,15 +32,13 @@ class App extends React.Component {
 
       const api_call = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${API_KEY}&unit=metric`);
       const data = await api_call.json();
-      console.log(data);
+      // console.log(data);
     
       // Set new state of the variables
       this.setState({
         city: data.name,
         country: data.sys.country,
         temperature: data.main.temp,
-        temp_max: data.main.temp_max,
-        temp_min: data.main.temp_min,
         wind: data.wind.speed,
         humidity: data.main.humidity,
         description: data.weather[0].description,
@@ -54,8 +50,6 @@ class App extends React.Component {
           city: undefined,
           country: undefined,
           temperature: undefined,
-          temp_max: undefined,
-          temp_min: undefined,
           wind: undefined,
           humidity: undefined,
           description: undefined,
