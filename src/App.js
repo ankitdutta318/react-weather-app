@@ -4,7 +4,7 @@ import Titles from './components/Titles';
 import Form from './components/Form';
 import Weather from './components/Weather';
 
-const API_KEY = "591466f240ccdef0581e14835732bc6d";   // App API key
+import API_KEY from "./config/config";
 
 class App extends React.Component {
 
@@ -13,9 +13,11 @@ class App extends React.Component {
     city: undefined,
     country: undefined,
     temperature: undefined,
+    description: undefined,
     wind: undefined,
     humidity: undefined,
-    description: undefined,
+    sunrise: undefined,
+    sunset: undefined,
     error: undefined
   }
   
@@ -27,6 +29,9 @@ class App extends React.Component {
     const city = e.target.elements.city.value;
     const country = e.target.elements.country.value;
 
+    // Set form elements to null
+    e.target.elements.city.value = "";
+    e.target.elements.country.value = "";
     
     if(city && country) {
 
@@ -38,10 +43,12 @@ class App extends React.Component {
       this.setState({
         city: data.name,
         country: data.sys.country,
-        temperature: data.main.temp,
-        wind: data.wind.speed,
-        humidity: data.main.humidity,
+        temperature: `${+(data.main.temp - 273).toFixed(2)} \xB0C`,
         description: data.weather[0].description,
+        wind: data.wind.speed,
+        humidity: `${data.main.humidity}%`,
+        sunrise: data.sys.sunrise,
+        sunset: data.sys.sunset,
         error: ""
       });
     } else {
@@ -50,9 +57,11 @@ class App extends React.Component {
           city: undefined,
           country: undefined,
           temperature: undefined,
+          description: undefined,
           wind: undefined,
           humidity: undefined,
-          description: undefined,
+          sunrise: undefined,
+          sunset: undefined,
           error: "Please enter the values."
         });
       }
@@ -62,25 +71,35 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Titles />
-
-        <Form getWeather={this.getWeather}/>
-
-        <Weather 
-        city={this.state.city}
-        country={this.state.country}
-        temperature={this.state.temperature}
-        temp_max={this.state.temp_max}
-        temp_min={this.state.temp_min}
-        wind={this.state.wind}
-        humidity={this.state.humidity}
-        description={this.state.description}
-        error={this.state.error}
-        />
-
+        <div className="wrapper">
+          <div className="main">
+            <div className="container">
+              <div className="row">
+                <div className="col-lg-5 col-xs-5 title-container">
+                  <Titles />
+                </div>
+                <div className="col-lg-7 col-xs-7 form-container">
+                  <Form getWeather={this.getWeather}/>
+                  <Weather 
+                    city={this.state.city}
+                    country={this.state.country}
+                    temperature={this.state.temperature}
+                    temp_max={this.state.temp_max}
+                    temp_min={this.state.temp_min}
+                    wind={this.state.wind}
+                    humidity={this.state.humidity}
+                    description={this.state.description}
+                    error={this.state.error}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 };
+
 
 export default App;
